@@ -2,6 +2,7 @@ library(ISLR)
 library(ggplot2)
 library(tidyverse)
 library(MASS)
+library(class)
 
 #Stock Market Data set
 Smarket <- ISLR::Smarket
@@ -85,3 +86,18 @@ names(qda_pred)
 qda_class <- qda_pred$class
 table(qda_class, Direction_2005)
 mean(qda_class==Direction_2005)
+
+#KNN
+train_X <- cbind(Smarket$Lag1, Smarket$Lag2)[train,]
+test_X <- cbind(Smarket$Lag1, Smarket$Lag2)[!train,]
+train_Direction <- Smarket$Direction[train]
+set.seed(1)
+knn_pred <- knn(train_X, test_X, train_Direction, k = 1)
+table(knn_pred,Direction_2005)
+(83+43)/252
+knn_pred <- knn(train_X, test_X, train_Direction, k = 3)
+table(knn_pred,Direction_2005)
+mean(knn_pred==Direction_2005)
+
+# train_X <- Smarket[train,c("Lag1","Lag2")]
+# test_X <- Smarket[!train,c("Lag1","Lag2")]
